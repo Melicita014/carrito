@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Granja de Mire</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+  <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+  <script>
+const { createApp } = Vue;
+
+
+createApp({
+  template: `
+    <div>
+      <h1> La Granja de Mire</h1>
+
+      <ul>
+        <li v-for="animal in paginatedAnimal" :key="animal.id">
+          <img :src="animal.imagen" :alt="animal.animal" width="250" height="250" /> //Coge la imagen siguiendo el enlace de la base de datos.
+          <div>
+           <h1> <strong>{{ animal.animal.toUpperCase() }}</strong> </h1> // El nombre en NEGRITA
+    
+
+            <h3>Descripcion: </h3> &nbsp  &nbsp  &nbsp  &nbsp {{ animal.descripion }}
+           
+           
+           <h3>Precio: </h3>  &nbsp  &nbsp  &nbsp  &nbsp{{ animal.price.toLocaleString() }} €
+
+
+       
+            <input id = cantidad type=number min = 0 value= 1 ></input>
+
+            <br/><br/><br/><br/>
+         <button @click="addToCart(animal)"> COMPRAR </button> // Boton para añadir producto, sin tener en cuenta el input.
+            </div>
+       
+        </li>
+      </ul>
+
+    <h2>Carrito</h2>
+        <ul v-if="cart.length > 0">
+        <li v-for="item in cart" :key="item.id" class="cart-item">
+            {{ item.title }} - Cantidad: {{ item.quantity }} - Total: {{ (item.quantity * item.price).toFixed(2) }} €
+        </li>
+        </ul>
+        <p v-else>El carrito está vacío</p>
+
+        <p v-if="totalPrice > 0">Total del carrito: {{ totalPrice.toFixed(2) }} €</p>
+    </div>
+  `,
+  data() {
+    return {
+      animals: [
+    { id: 1, animal: "Asno", price: 155, descripion : "Un animal de cuatro patas bastante docil, sirve para llevar carga de hasta 450 kg. Se vende por unidades y se debe de tener previo conocimientos del animal." , cantidad: "0", imagen: "imagenes/burro.jpg" },
+
+
+    { id: 2, animal: "Caballo", price: 1005, descripion : "Caballos de granja utiles para llevar carga, se venden por unidades y se debe tener un curso de trato de animal.", cantidad: "0", imagen: "imagenes/caballo.jpg" },
+
+
+    { id: 3, animal: "Cerdo", price: 450, descripion : "Cerditios rosas capaces de soportar altas temperaturas, perfectos para la crianza, se debe de tener previo conocimientos." , cantidad: "0", imagen: "imagenes/cerdo.jpg" },
+
+
+    { id: 4, animal: "Gallina", price: 251, descripion : "Gallinas de campo ideales para consumo propio incluso para criar, se venden en cantidad de 2 para el bienestar de los animales. " , cantidad: "0", imagen: "imagenes/gallina.jpg" },
+
+
+    { id: 5, animal: "Oca", price: 150, descripion : "Unas aves muy inteligentes con buena carne para la crianza, se debera de acreditar el permiso T de animalia." , cantidad: "0", imagen: "imagenes/ocas.jpg" },
+
+
+    { id: 6, animal: "Oveja", price: 1005, descripion : "Un animal multiusos, puedes recoger lana, leche e incluso usarlo para consumo, en el pack se debe coger un rebaño de al menos 5 ovejas con un carnero entre ellos." , cantidad: "0", imagen: "imagenes/oveja.jpg" },
+
+
+    { id: 7, animal: "Pato", price: 105, descripion : "Un pato patoda la vida, carne sabrosa necesitan cuidados minimo pero es recomendable tratarlos con calidad ya que afecta al sabor de la carne." , cantidad: "0", imagen: "imagenes/pato.jpg" },
+
+
+    { id: 8, animal: "Pavos", price: 58, descripion : "Son animales muy asustadizos, debes de tener delicadeza con ellos , sin licencia de trato de animales no podras adquirirlo." , cantidad: "0", imagen: "imagenes/pavos.jpg" },
+
+
+    { id: 9, animal: "Vaca", price: 300, descripion : "Vacas lecheras, propocionan leche diariamente, son mansas pero cagonas " , cantidad: "0", imagen: "imagenes/vaca.jpg" },
+   
+    ],
+      currentPage: 1,
+      itemsPerPage: 10,
+      cart: [],
+    };
+  },
+  computed: {
+    totalPrice() { // Hace la suma total de todos los productos dado al boton
+          return this.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        },
+      
+  },
+  methods: {
+        addToCart(product) { // Añade la informacion
+          const existingItem = this.cart.find((item) => item.id === product.id);
+          if (existingItem) {
+            existingItem.quantity += 1;
+          } else {
+            this.cart.push({ ...product, quantity: 1 });
+          }
+        },
+      },
+}).mount('#app');
+
+
+</script>
+</body>
+</html>
+
+
