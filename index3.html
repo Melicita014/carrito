@@ -20,9 +20,9 @@ createApp({
 
       <ul>
         <li v-for="animal in paginatedAnimal" :key="animal.id">
-          <img :src="animal.imagen" :alt="animal.animal" width="250" height="250" /> //Coge la imagen siguiendo el enlace de la base de datos.
+          <img :src="animal.imagen" :alt="animal.animal" width="250" height="250" />
           <div>
-           <h1> <strong>{{ animal.animal.toUpperCase() }}</strong> </h1> // El nombre en NEGRITA
+           <h1> <strong>{{ animal.animal.toUpperCase() }}</strong> </h1>
     
 
             <h3>Descripcion: </h3> &nbsp  &nbsp  &nbsp  &nbsp {{ animal.descripion }}
@@ -35,7 +35,7 @@ createApp({
             <input id = cantidad type=number min = 0 value= 1 ></input>
 
             <br/><br/><br/><br/>
-         <button @click="addToCart(animal)"> COMPRAR </button> // Boton para añadir producto, sin tener en cuenta el input.
+         <button @click="addToCart(animal)"> COMPRAR </button>
             </div>
        
         </li>
@@ -88,13 +88,19 @@ createApp({
     };
   },
   computed: {
-    totalPrice() { // Hace la suma total de todos los productos dado al boton
+    totalPrice() {
           return this.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
         },
       
+
+    paginatedAnimal() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.animals.slice(start, end);
+    },
   },
   methods: {
-        addToCart(product) { // Añade la informacion
+        addToCart(product) {
           const existingItem = this.cart.find((item) => item.id === product.id);
           if (existingItem) {
             existingItem.quantity += 1;
